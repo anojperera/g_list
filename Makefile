@@ -2,7 +2,7 @@
 ## Sat Jul 24 18:51:26 BST 2010
 
 CFLAGS1 = -g
-CFLAGS2 = -O
+CFLAGS2 = -O0
 CFLAGS3 = -Wall
 PROG = tmp
 CCC = gcc

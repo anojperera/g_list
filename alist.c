@@ -4,6 +4,25 @@
 
 #include "alist.h"
 
+/* constructor */
+aNode* aList_New()
+{
+    /* aNode* tmp; */
+
+    /* /\* create mem *\/ */
+    /* tmp = (aNode*) malloc(sizeof(aNode)); */
+
+    /* /\* check for NULL pointer *\/ */
+    /* if(!tmp) */
+    /* 	return NULL; */
+
+    /* /\* initialise elements *\/ */
+    /* tmp->ix = 0; */
+    /* tmp->data = NULL; */
+    /* tmp->next = NULL; */
+    /* tmp->previous = NULL; */
+    return NULL;
+}
 
 /* adds a node to the collection */
 void aList_Add(aNode** obj, void* data,
@@ -26,8 +45,19 @@ void aList_Add(aNode** obj, void* data,
 
     /* copy memory to new location */
     memcpy(temp->data, data, sz);
+
+    temp->previous = NULL;
+
+    if(ix_counter != 0)
+	{
+	    (*obj)->previous = temp; 	/* set previous to current node */
+	    temp->last = (*obj)->last;
+
+	    if(ix_counter == 1)
+		temp->last = *obj;
+	}
     
-    temp->ix = ix_counter++;	/* increment index counter */
+    temp->ix = ix_counter++;	 	/* increment index counter */
     
     temp->next = *obj;
 
@@ -36,51 +66,51 @@ void aList_Add(aNode** obj, void* data,
     return;
 }
 
-void aList_AddB(aNode** obj, void* data,
-		unsigned int sz)
-{
-    /* if first node call insert from front */
-    if(*obj == NULL)
-	{	
-	    aList_Add(obj, data, sz);
-	    return;
-	}
+/* void aList_AddB(aNode** obj, void* data, */
+/* 		unsigned int sz) */
+/* { */
+/*     /\* if first node call insert from front *\/ */
+/*     if(*obj == NULL) */
+/* 	{	 */
+/* 	    aList_Add(obj, data, sz); */
+/* 	    return; */
+/* 	} */
 
-    /* if memory size was not assigned
-       return function */
-    if(sz == 0)
-	return;
+/*     /\* if memory size was not assigned */
+/*        return function *\/ */
+/*     if(sz == 0) */
+/* 	return; */
     
-    aNode* temp;		/* temporary node */
+/*     aNode* temp;		/\* temporary node *\/ */
 
-    /* create pointer */
-    temp = (aNode*) malloc(sizeof(aNode));
-    temp = *obj;
-    while(temp->next != NULL)
-	temp = temp->next;
+/*     /\* create pointer *\/ */
+/*     temp = (aNode*) malloc(sizeof(aNode)); */
+/*     temp = *obj; */
+/*     while(temp->next != NULL) */
+/* 	temp = temp->next; */
 
 
-    aNode* last = (aNode*) malloc(sizeof(aNode));
+/*     aNode* last = (aNode*) malloc(sizeof(aNode)); */
 	
-    last->data = malloc(sz);	/* create mem for data obj */
+/*     last->data = malloc(sz);	/\* create mem for data obj *\/ */
 	
-    /* copy memory to new location */
-    memcpy(last->data, data, sz);
+/*     /\* copy memory to new location *\/ */
+/*     memcpy(last->data, data, sz); */
 	
-    last->next = NULL;			/* set next pointer to NULL */
+/*     last->next = NULL;			/\* set next pointer to NULL *\/ */
 	
-    last->ix++;					/*index counter */
-    if(temp)
-	{
-	    temp->next = last;
-	}
-    else
-	{
-	    temp = last;
-	}
-    return;
+/*     last->ix++;					/\*index counter *\/ */
+/*     if(temp) */
+/* 	{ */
+/* 	    temp->next = last; */
+/* 	} */
+/*     else */
+/* 	{ */
+/* 	    temp = last; */
+/* 	} */
+/*     return; */
 
-}
+/* } */
 
 
 /* return the count of objects */ 
@@ -97,7 +127,9 @@ unsigned int  aList_Count(aNode** obj)
 	    counter++;
 	    tmp = tmp->next;
 	}
+
     return counter;
+    
 }
 
 void aList_Clear(aNode** obj)
@@ -117,6 +149,7 @@ void aList_Clear(aNode** obj)
 	    free(del_node);
 	}
 
+    /* *obj = NULL; */
     return;
 }
 
@@ -137,4 +170,43 @@ aNode* aList_Item(aNode** obj, unsigned int ix)
 	}
 
     return temp;
+}
+
+/* display results */
+int aList_Display(aNode** obj,
+		  int s_flg,
+		  int (*callback) (void* , unsigned int))
+{
+    /* check for NULL pointer */
+    if(!obj || !(*obj))
+	return 0;
+
+    /* check function pointer */
+    if(!callback)
+	return 0;
+
+    /* declare temporary node */
+    aNode* tmp;
+
+    /* depengind on the start flag
+       iterate from last or first */
+    if(s_flg)
+	tmp = (*obj)->last;
+    else
+	tmp = *obj;
+
+    int i = 0;
+    while(tmp != NULL)
+	{
+	    callback(tmp->data, tmp->ix);
+	    
+	    if(s_flg)
+		tmp = tmp->previous;
+	    else
+		tmp = tmp->next;
+	    i++;
+	}
+
+    return 0;
+    
 }
