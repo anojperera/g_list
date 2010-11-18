@@ -17,7 +17,7 @@ static int Display(void* data, unsigned int ix)
 int main(int argc, char** argv)
 {
     int flg = 0;
-    if(argc > 0)
+    if(argc > 1)
 	flg = atoi(argv[1]);
     else
 	flg = 0;
