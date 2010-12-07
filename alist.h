@@ -59,6 +59,17 @@ extern "C" {
 		      int s_flg,
 		      int (*callback) (void* , unsigned int));
 
+    /* Display2 function is simillar to display function above.
+     * Fourth argument of the function shall be passed to the
+     * first argument of the callback function
+     * Call back function must return 0 to indicate success.
+     * If any other values were returned display function shall
+     * stop.
+     */
+    int aList_Display2(aNode** obj,
+		       int s_flg,
+		       int (*callback) (void*, void* unsigned int),
+		       void * obj);
     
     /* c++ compatibility */
 #ifdef __cplusplus

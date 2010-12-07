@@ -198,7 +198,8 @@ int aList_Display(aNode** obj,
     int i = 0;
     while(tmp != NULL)
 	{
-	    callback(tmp->data, tmp->ix);
+	    if(callback(tmp->data, tmp->ix))
+		break;
 	    
 	    if(s_flg)
 		tmp = tmp->previous;
@@ -207,6 +208,45 @@ int aList_Display(aNode** obj,
 	    i++;
 	}
 
-    return 0;
+    return 1;
     
 }
+
+/* Display Function 2 */
+int aList_Display2(aNode** obj,
+		       int s_flg,
+		       int (*callback) (void*, void* unsigned int),
+		       void * obj)
+{
+    /* check for pointers */
+    if(!obj || !(*obj) || !callback)
+	return 0;
+
+    /* declare temporary node */
+    aNode* tmp;
+    
+   /* depengind on the start flag
+       iterate from last or first */
+    if(s_flg)
+	tmp = (*obj)->last;
+    else
+	tmp = *obj;
+
+    int i = 0;
+
+    while(tmp != NULL)
+	{
+	    if(callback(obj, tmp->data, tmp->ix))
+		return 0;
+	    
+	    if(s_flg)
+		tmp = tmp->previous;
+	    else
+		tmp = tmp->next;
+
+	    i++;
+	}
+
+    return i;
+}
+
