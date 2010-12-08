@@ -68,8 +68,8 @@ extern "C" {
      */
     int aList_Display2(aNode** obj,
 		       int s_flg,
-		       int (*callback) (void*, void* unsigned int),
-		       void * obj);
+			   int (*callback) (void*, void*, unsigned int),
+		       void * c_obj);
     
     /* c++ compatibility */
 #ifdef __cplusplus

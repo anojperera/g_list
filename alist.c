@@ -215,8 +215,8 @@ int aList_Display(aNode** obj,
 /* Display Function 2 */
 int aList_Display2(aNode** obj,
 		       int s_flg,
-		       int (*callback) (void*, void* unsigned int),
-		       void * obj)
+			   int (*callback) (void*, void*, unsigned int),
+		       void* c_obj)
 {
     /* check for pointers */
     if(!obj || !(*obj) || !callback)
@@ -236,7 +236,7 @@ int aList_Display2(aNode** obj,
 
     while(tmp != NULL)
 	{
-	    if(callback(obj, tmp->data, tmp->ix))
+	    if(callback(c_obj, tmp->data, tmp->ix))
 		return 0;
 	    
 	    if(s_flg)
