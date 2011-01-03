@@ -5,7 +5,7 @@
 #include "alist.h"
 
 /* indext counter declared static */
-static unsigned int ix_counter = 0;
+/* unsigned int ix_counter = 0; */
 
 /* constructor */
 aNode* aList_New()
@@ -24,7 +24,8 @@ aNode* aList_New()
     /* tmp->data = NULL; */
     /* tmp->next = NULL; */
     /* tmp->previous = NULL; */
-    ix_counter = 0;
+    /* tmp->last = NULL; */
+    /* tmp->ix_counter = 0; */
     return NULL;
 }
 
@@ -51,16 +52,20 @@ void aList_Add(aNode** obj, void* data,
 
     temp->previous = NULL;
 
-    if(ix_counter != 0)
+    if(*obj != NULL)
 	{
 	    (*obj)->previous = temp; 	/* set previous to current node */
 	    temp->last = (*obj)->last;
 
-	    if(ix_counter == 1)
+	    if((*obj)->ix_counter == 1)
 		temp->last = *obj;
+
+	    temp->ix_counter = (*obj)->ix_counter;
 	}
-    
-    temp->ix = ix_counter++;	 	/* increment index counter */
+    else
+	temp->ix_counter = 0;
+
+    temp->ix = temp->ix_counter++;	 	/* increment index counter */
     
     temp->next = *obj;
 

@@ -20,6 +20,7 @@ extern "C" {
     /* node structure */    
     struct _node
     {
+	unsigned int ix_counter;
 	unsigned int ix;
 	void* data;
 	aNode* next;
