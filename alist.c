@@ -4,6 +4,9 @@
 
 #include "alist.h"
 
+/* indext counter declared static */
+static unsigned int ix_counter = 0;
+
 /* constructor */
 aNode* aList_New()
 {
@@ -21,6 +24,7 @@ aNode* aList_New()
     /* tmp->data = NULL; */
     /* tmp->next = NULL; */
     /* tmp->previous = NULL; */
+    ix_counter = 0;
     return NULL;
 }
 
@@ -28,8 +32,7 @@ aNode* aList_New()
 void aList_Add(aNode** obj, void* data,
 	       unsigned int sz)
 {
-    /* indext counter declared static */
-    static unsigned int ix_counter = 0;
+
     
     /* if memory size was not assigned
        return function */
