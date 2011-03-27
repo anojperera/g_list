@@ -4,52 +4,45 @@
 #ifndef __ALIST__
 #define __ALIST__
 
-/* c++ compaitiblity */
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>	
 
-    /* forward declaration */
-    typedef struct _node aNode;
+/* forward declaration */
+typedef struct _node aNode;
     
-    /* node structure */    
-    struct _node
-    {
-	unsigned int ix_counter;
-	unsigned int ix;
-	void* data;
-	aNode* next;
-	aNode* previous;
-	aNode* last;		/* pointer to last node */
-    };
+/* node structure */    
+struct _node
+{
+    unsigned int ix_counter;
+    unsigned int ix;
+    void* data;
+    aNode* next;
+    aNode* previous;
+    aNode* last;		/* pointer to last node */
+};
 
+/* c++ compaitiblity */
+#ifdef __cplusplus
+extern "C" {
+#endif
     /* constructor */
-    aNode* aList_New();
+    extern inline aNode* aList_New();
 
     /* add a node to list */
-    void aList_Add(aNode** obj,
+    extern inline void aList_Add(aNode** obj,
 		   void* data,
 		   unsigned int sz);
 
-    /* add a node from back */
-    /* void aList_AddB(aNode** obj, */
-    /* 		    void* data, */
-    /* 		    unsigned int sz); */
-
 
     /* return the count of list */
-    unsigned int  aList_Count(aNode** obj);
+    extern inline unsigned int  aList_Count(aNode** obj);
 
     /* clear list */
-    void aList_Clear(aNode** obj);
+    extern inline void aList_Clear(aNode** obj);
 
     /* retrieved an item from list */
-    aNode* aList_Item(aNode** obj, unsigned int ix);
+    extern inline aNode* aList_Item(aNode** obj, unsigned int ix);
 
     /* aList Diaplay function shall scan through
        the list and call the function pointer.
@@ -71,6 +64,13 @@ extern "C" {
 		       int s_flg,
 			   int (*callback) (void*, void*, unsigned int),
 		       void * c_obj);
+
+    /* returns data held in linst and increments
+     * list. NULL pointer returned on failure or end of list */
+    extern inline int aList_Next(aNode** obj, void* val);
+
+    /* simillar to above, opposite direction */
+    /* extern inline int aList_Previous(aNode** obj, void* val); */
     
     /* c++ compatibility */
 #ifdef __cplusplus

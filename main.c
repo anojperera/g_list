@@ -49,7 +49,7 @@ int test2(int argc, char** argv)
 
     aNode* sObj;
     time(&start_time);    
-    if(!ix)
+    if(ix < 0)
 	{
 	    time(&end_time);
 	    aList_Display(&first, 1, Display);

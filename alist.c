@@ -10,22 +10,6 @@
 /* constructor */
 aNode* aList_New()
 {
-    /* aNode* tmp; */
-
-    /* /\* create mem *\/ */
-    /* tmp = (aNode*) malloc(sizeof(aNode)); */
-
-    /* /\* check for NULL pointer *\/ */
-    /* if(!tmp) */
-    /* 	return NULL; */
-
-    /* /\* initialise elements *\/ */
-    /* tmp->ix = 0; */
-    /* tmp->data = NULL; */
-    /* tmp->next = NULL; */
-    /* tmp->previous = NULL; */
-    /* tmp->last = NULL; */
-    /* tmp->ix_counter = 0; */
     return NULL;
 }
 
@@ -258,3 +242,33 @@ int aList_Display2(aNode** obj,
     return i;
 }
 
+/* returns the data held in list and increments */
+int aList_Next(aNode** obj, void* val)
+{
+    if(!obj || !(*obj))
+	{
+	    val = NULL;
+	    return 0;
+	}
+
+    val = (*obj)->data;
+
+    /* increment */
+    (*obj) = (*obj)->next;
+
+    return 1;
+	
+}
+
+/* int aList_Previous(aNode** obj, void* val) */
+/* { */
+/*     if(!obj || !(*obj)) */
+/* 	{ */
+/* 	    val = NULL; */
+/* 	    return 0; */
+/* 	} */
+
+/*     val = (*obj)->data; */
+    
+/*     (*obj) = (*obj)->previous; */
+/* } */
