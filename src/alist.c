@@ -138,6 +138,7 @@ void aList_Clear(aNode** obj)
 	    del_node = current;
 	    current = current->next;
 
+	    del_node->data = NULL;
 	    free(del_node);
 	    del_node = NULL;
 	}
@@ -162,7 +163,9 @@ inline void aList_Clear2(aNode** obj, int (*callback) (void* obj, unsigned int))
 	    if(callback)
 		callback(del_node->data, del_node->ix);
 
+	    del_node->data = NULL;
 	    current = current->next;
+	    free(del_node);
 	    del_node = NULL;
 	}
 	    
