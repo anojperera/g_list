@@ -139,10 +139,33 @@ void aList_Clear(aNode** obj)
 	    current = current->next;
 
 	    free(del_node);
+	    del_node = NULL;
 	}
 
     /* *obj = NULL; */
     return;
+}
+
+/* Second clear function calls a function pointer deallocating memory */
+inline void aList_Clear2(aNode** obj, int (*callback) (void* obj, unsigned int))
+{
+    if(!obj)
+	return;
+
+    aNode* current = *obj;
+    aNode* del_node;
+    while(current != NULL)
+	{
+	    del_node = current;
+
+	    /* check if callback function assigned */
+	    if(callback)
+		callback(del_node->data, del_node->ix);
+
+	    current = current->next;
+	    del_node = NULL;
+	}
+	    
 }
 
 

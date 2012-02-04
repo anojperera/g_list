@@ -27,22 +27,23 @@ struct _node
 extern "C" {
 #endif
     /* constructor */
-    extern inline aNode* aList_New();
+    inline aNode* aList_New();
 
     /* add a node to list */
-    extern inline void aList_Add(aNode** obj,
+    inline void aList_Add(aNode** obj,
 		   void* data,
 		   unsigned int sz);
 
 
     /* return the count of list */
-    extern inline unsigned int  aList_Count(aNode** obj);
+    inline unsigned int  aList_Count(aNode** obj);
 
     /* clear list */
-    extern inline void aList_Clear(aNode** obj);
+    inline void aList_Clear(aNode** obj);
+    inline void aList_Clear2(aNode** obj, int (*callback) (void* obj, unsigned int));
 
     /* retrieved an item from list */
-    extern inline aNode* aList_Item(aNode** obj, unsigned int ix);
+    inline aNode* aList_Item(aNode** obj, unsigned int ix);
 
     /* aList Diaplay function shall scan through
        the list and call the function pointer.
