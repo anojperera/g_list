@@ -34,7 +34,15 @@ extern "C" {
 		   void* data,
 		   unsigned int sz);
 
-
+    /* Add 2 method is for copying object with pointer elements.
+     * Using this methed shall provide the user to copy pointer elements
+     * to the internal copy */
+    inline void aList_Add2(aNode** obj,				/* link list item */
+			   void* data,				/* data pointer */
+			   unsigned int sz,			/* object size */
+			   void* usr_obj,			/* user object */
+			   int (*callback_add)(void*, void*));	/* callback function to be call to complete the add */
+			   
     /* return the count of list */
     inline unsigned int  aList_Count(aNode** obj);
 
