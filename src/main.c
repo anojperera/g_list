@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "alist.h"
+#include <alist.h>
 struct _test
 {
     char* t_str;
