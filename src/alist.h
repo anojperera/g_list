@@ -42,6 +42,12 @@ extern "C" {
 			   unsigned int sz,			/* object size */
 			   void* usr_obj,			/* user object */
 			   int (*callback_add)(void*, void*));	/* callback function to be call to complete the add */
+
+    /* Add3 method doesn't copy the contents internally. */
+    inline void aList_Add3(aNode** obj,				/* link list item */
+			   void* data,				/* data pointer */
+			   void* usr_obj,			/* user object, passed to first argument of callback */
+			   int (*callback)(void*, void*));	/* (user object, data pointer */
 			   
     /* return the count of list */
     inline unsigned int  aList_Count(aNode** obj);
