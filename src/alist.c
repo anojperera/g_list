@@ -77,7 +77,7 @@ inline void aList_Add3(aNode** obj,				/* link list item */
 		       void* usr_obj,				/* user object, passed to second argument of callback */
 		       int (*callback)(void*, void*))		/* (data pointer, user object) */
 {
-    aNode* _tmp;						/* temporary node */
+    aNode* _tmp = NULL;						/* temporary node */
 
     /* create pointer */
     _tmp = (aNode*) malloc(sizeof(aNode));
@@ -201,7 +201,7 @@ int aList_Display(aNode** obj,
 	return 0;
 
     /* declare temporary node */
-    aNode* tmp;
+    aNode* tmp = NULL;
 
     /* depengind on the start flag
        iterate from last or first */
@@ -238,7 +238,7 @@ int aList_Display2(aNode** obj,
 	return 0;
 
     /* declare temporary node */
-    aNode* tmp;
+    aNode* tmp = NULL;
     
    /* depengind on the start flag
        iterate from last or first */
