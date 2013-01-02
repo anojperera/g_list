@@ -70,6 +70,38 @@ inline void aList_Add2(aNode** obj,				/* link list item */
     if(callback_add)
 	callback_add((*obj)->data, (usr_obj? usr_obj : NULL));
 }
+
+/* Add3 method doesn't copy the contents internally. */
+inline void aList_Add3(aNode** obj,				/* link list item */
+		       void* data,				/* data pointer */
+		       void* usr_obj,				/* user object, passed to second argument of callback */
+		       int (*callback)(void*, void*))		/* (data pointer, user object) */
+{
+    aNode* _tmp = NULL;						/* temporary node */
+
+    /* create pointer */
+    _tmp = (aNode*) malloc(sizeof(aNode));
+    _tmp->data = data;						/* set data */
+    _tmp->previous = NULL;
+    if(*obj != NULL)
+	{
+	    (*obj)->previous = _tmp;				/* set previous to current node */
+	    _tmp->last = (*obj)->last;
+	    if((*obj)->ix_counter == 1)
+		_tmp->last = *obj;
+	    _tmp->ix_counter = (*obj)->ix_counter;
+	}
+    else
+	_tmp->ix_counter = 0;
+
+    _tmp->ix = _tmp->ix_counter++;				/* increment index counter */
+    _tmp->next = *obj;
+    *obj = _tmp;
+    if(callback)						/* call function pointer if assigned */
+	callback((*obj)->data, (usr_obj? usr_obj : NULL));
+    return;
+}
+
 /* return the count of objects */ 
 unsigned int  aList_Count(aNode** obj)
 {
@@ -169,7 +201,7 @@ int aList_Display(aNode** obj,
 	return 0;
 
     /* declare temporary node */
-    aNode* tmp;
+    aNode* tmp = NULL;
 
     /* depengind on the start flag
        iterate from last or first */
@@ -206,7 +238,7 @@ int aList_Display2(aNode** obj,
 	return 0;
 
     /* declare temporary node */
-    aNode* tmp;
+    aNode* tmp = NULL;
     
    /* depengind on the start flag
        iterate from last or first */
