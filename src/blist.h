@@ -14,12 +14,11 @@
 typedef struct _blist_elm blist_elm;
 typedef	struct _blist blist;
 
-
 /* Implementation of structs */
 struct _blist_elem
 {
     void* _data;
-    unsined int ix;
+    unsined int _ix;
     struct _blist_elm* _next;
     struct _blist_elm* _prev;
 };
