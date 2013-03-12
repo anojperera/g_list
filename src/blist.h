@@ -15,10 +15,10 @@ typedef struct _blist_elm blist_elm;
 typedef	struct _blist blist;
 
 /* Implementation of structs */
-struct _blist_elem
+struct _blist_elm
 {
     void* _data;
-    unsined int _ix;
+    unsigned int _ix;
     struct _blist_elm* _next;
     struct _blist_elm* _prev;
 };
@@ -26,9 +26,9 @@ struct _blist_elem
 
 struct _blist
 {
-    sizt_t _elm_count;
+    size_t _elm_count;
     int (*_comp)(const void* key1, const void* key2);			/* function pointer for comparison */
-    int (*_delete)(void* data);						/* function pointer for delete */
+    void (*_delete)(void* data);						/* function pointer for delete */
     struct _blist_elm* _head;						/* head element */
     struct _blist_elm* _tail;						/* tail element */
 };
@@ -43,13 +43,15 @@ extern "C" {
     int blist_new(blist* obj, void (*delete)(void* data));
     void blist_delete(blist* obj);
 
-    int blist_add_next(blist* obj, blist_elm* element, const void* data);
-    int blist_add_prev(blist* obj, blist_elm* elemetn, const void* data);
+    int blist_add_next(blist* obj, blist_elm* element, void* data);
+    int blist_add_prev(blist* obj, blist_elm* elemetn, void* data);
 
     int blist_remove(blist* obj, blist_elm* element, void** data);
 
-    /* For each function, able to control direction */
-    int blist_foreach(blist* obj, unsigned int dir, void* ext_obj, int (*foreach)(void* obj, void* data, unsined int ix));
+    /* For each function, able to control direction
+     * ext_obj shall be passed to the first argument of the callback
+     * Callback function must return 0 to continue */
+    int blist_foreach(blist* obj, unsigned int dir, void* ext_obj, int (*foreach)(void* obj, void* data, unsigned int ix));
 
     /* Convenient macros */
 #define blist_count(obj)((obj)->_elm_count)
@@ -60,6 +62,37 @@ extern "C" {
 #define blist_data(elm)((elm)->data)
 #define blist_next(elm)((elm)->_next)
 #define blist_prev(elm)((elm)->_prev)
+
+    
+    /* Wrapper functions for adding data to the list at each end.
+     * They internally called above methods */
+    inline __attribute__ ((always_inline)) static int blist_add_from_head(blist* obj, void* data)
+    {
+	blist_elm* _elm;
+	/* check for object pointer */
+	if(obj == NULL)
+	    return -1;
+
+	/* get head element */
+	_elm = blist_get_head(obj);
+
+	/* call add next method */
+	return blist_add_next(obj, _elm, data);
+    }
+
+    /* inline __attribute__ ((always_inline)) static int blist_add_from_tail(blist* obj, void* data) */
+    /* { */
+    /* 	blist_elm* _elm; */
+    /* 	/\* check for object pointer *\/ */
+    /* 	if(obj == NULL) */
+    /* 	    return -1; */
+
+    /* 	/\* get tail *\/ */
+    /* 	_elm = blist_get_tail(obj); */
+
+    /* 	/\* call add previous *\/ */
+    /* 	return blist_add_prev(obj, _elm, data); */
+    /* } */
     
 #ifdef __cplusplus
 }

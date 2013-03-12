@@ -4,7 +4,7 @@
 #include "blist.h"
 
 #define BLIST_OBJ_CHK(obj) \
-    if(obj==NULL) return
+    if(obj==NULL) return -1
 
 /* Constructor method */
 int blist_new(blist* obj, void (*delete)(void* data))
@@ -22,15 +22,16 @@ int blist_new(blist* obj, void (*delete)(void* data))
 void blist_delete(blist* obj)
 {
     void* _data;
-    BLIST_OBJ_CHK(obj);
+    if(obj == NULL)
+	return;
     /* iterate over the elements and remove */
     while(blist_count(obj) > 0)
 	{
-	    if(blist_remove(obj, blist_get_tail(obj), (void**) &_data) == 0 &&
-	       obj->_delete != NULL)
+	    if(blist_remove(obj, blist_get_tail(obj), (void**) &_data) == 0)
 		{
 		    /* call function pointer for delete */
-		    obj->_delete(_data);
+		    if(obj->_delete)
+			obj->_delete(_data);
 		}
 	    
 	}
@@ -44,7 +45,7 @@ void blist_delete(blist* obj)
 }
 
 /* Add next method */
-int blist_add_next(blist* obj, blist_elm* element, const void* data)
+int blist_add_next(blist* obj, blist_elm* element, void* data)
 {
     blist_elm* _new_elm;			/* new element */
     BLIST_OBJ_CHK(obj);
@@ -58,7 +59,7 @@ int blist_add_next(blist* obj, blist_elm* element, const void* data)
 	return -1;
     _new_elm->_ix = 0;
     /* add data to new element */
-    _new_elm->data = (void*) data;
+    _new_elm->_data = (void*) data;
 
     /* if its the first element */
     if(blist_count(obj) == 0)
@@ -88,7 +89,7 @@ int blist_add_next(blist* obj, blist_elm* element, const void* data)
 }
 
 /* Add previous */
-int blist_add_prev(blist* obj, blist_elm* element, const void* data)
+int blist_add_prev(blist* obj, blist_elm* element, void* data)
 {
     blist_elm* _new_elm;
 
@@ -174,10 +175,10 @@ int blist_remove(blist* obj, blist_elm* element, void** data)
     return 0;
 }
 
-int blist_foreach(blist* obj, unsigned int dir, void* ext_obj, int (*foreach)(void* obj, void* data, unsined int ix))
+int blist_foreach(blist* obj, unsigned int dir, void* ext_obj, int (*foreach)(void* obj, void* data, unsigned int ix))
 {
     blist_elm* _elm;				/* temporary element */
-    unsined int _int_cnt = 0;			/* internal counter */
+    unsigned int _int_cnt = 0;			/* internal counter */
     
     /* object check */
     BLIST_OBJ_CHK(obj);
