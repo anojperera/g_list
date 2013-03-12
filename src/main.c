@@ -5,18 +5,41 @@
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
-
 #include <alist.h>
+#include "blist.h"
+#include "gstack.h"
+
 struct _test
 {
     char* t_str;
     int val;
 };
-    
+
 static int Display(void* data, unsigned int ix)
 {
     /* print data */
     /* printf ("%i-index%d\n",*((int*) data), ix); */
+    return 0;
+}
+
+/* blist delete method */
+static void _blist_delete(void* data)
+{
+    /* check for NULL pointer and delete */
+    if(data != NULL)
+	free(data);
+    return;
+}
+
+/* blsit foreach */
+static int _blist_foreach(void* obj, void* data, unsigned int ix)
+{
+    char* _data;
+    /* continue array if element was null */
+    if(data == NULL)
+	return 0;
+    _data = (char*) data;
+    fprintf(stdout, "%s - %i\n", _data, ix);
     return 0;
 }
 
@@ -27,7 +50,7 @@ static int _copy_helper(void* obj, void* usr_obj)
     struct _test* _uobj;
     if(!obj || !usr_obj)
 	return 0;
-    
+
     _obj = (struct _test*) obj;
     _uobj = (struct _test*) usr_obj;
     _obj->t_str = (char*) malloc(sizeof(char) * (strlen(_uobj->t_str)+1));
@@ -64,10 +87,13 @@ static int _display_helper(void* obj, unsigned int ix)
 int test1(int argc, char** argv);
 int test2(int argc, char** argv);
 int test3(int argc, char** argv);
+int test4(int argc, char** argv);
+int test5(int argc, char** argv);
+int test6(int argc, char** argv);
 
 int main(int argc, char** argv)
 {
-    return test3(argc, argv);
+    return test6(argc, argv);
 }
 
 
@@ -80,7 +106,7 @@ int test3(int argc, char** argv)
 	max = atoi(argv[1]);
     if(argc > 2)
 	s_flg = atoi(argv[2]);
-    
+
     objs.t_str = (char*) malloc(sizeof(char) * 16);
     for(i=0;i<max;i++)
 	{
@@ -92,7 +118,7 @@ int test3(int argc, char** argv)
 	}
 
     aList_Display(&_node, s_flg, _display_helper);
-    
+
     free(objs.t_str);
     aList_Clear2(&_node, _delete_helper);
     return 0;
@@ -102,7 +128,7 @@ int test2(int argc, char** argv)
 {
     time_t start_time, end_time;
     int cnt = 5, ix = 0;
-    
+
     int i;
     if(argc > 1)
 	cnt = atoi(argv[1]);
@@ -113,7 +139,7 @@ int test2(int argc, char** argv)
 	ix = atoi(argv[2]);
     else
 	ix = 0;
-    
+
 
     aNode* first = aList_New();
 
@@ -123,7 +149,7 @@ int test2(int argc, char** argv)
 	}
 
     aNode* sObj;
-    time(&start_time);    
+    time(&start_time);
     if(ix < 0)
 	{
 	    time(&end_time);
@@ -153,11 +179,11 @@ int test1(int argc, char** argv)
 	flg = atoi(argv[1]);
     else
 	flg = 0;
-    
+
     aNode* first = aList_New();
-    
+
     /* aNode* first = NULL; */
-	
+
     char ch1[] = "Test 1";
     char ch2[] = "Test 2";
     char ch3[] = "Test 3";
@@ -173,33 +199,33 @@ int test1(int argc, char** argv)
 		case 0:
 		    buff[i] = (char*)
 			malloc(sizeof(char) * (strlen(ch1) + 1));
-	    
+
 		    strcpy(buff[i], ch1);
 		    break;
 		case 1:
 		    buff[i] = (char*)
 			malloc(sizeof(char) * (strlen(ch2) + 1));
-	    
+
 		    strcpy(buff[i], ch2);
 		    break;
 		case 2:
 		    buff[i] = (char*)
 			malloc(sizeof(char) * (strlen(ch3) + 1));
-	    
+
 		    strcpy(buff[i], ch3);
 		    break;
 		case 3:
 		    buff[i] = (char*)
 			malloc(sizeof(char) * (strlen(ch4) + 1));
-	    
+
 		    strcpy(buff[i], ch4);
 		    break;
 		case 4:
 		    buff[i] = (char*)
 			malloc(sizeof(char) * (strlen(ch5) + 1));
-	    
+
 		    strcpy(buff[i], ch5);
-		    break;		    
+		    break;
 		}
 	    aList_Add(&first, buff[i], strlen(buff[i])+1);
 	}
@@ -215,7 +241,7 @@ int test1(int argc, char** argv)
     /* aList_Add(&first, ch3, strlen(ch3)+1); */
     /* aList_Add(&first, ch4, strlen(ch4)+1); */
     /* aList_Add(&first, ch5, strlen(ch5)+1); */
-	
+
     /* int i = 0; */
     int MAX = aList_Count(&first);
     aNode* tmp;
@@ -232,3 +258,153 @@ int test1(int argc, char** argv)
     return 0;
 }
 
+/* Test blist function */
+int test4(int argc, char** argv)
+{
+
+    blist _list;
+    int _flg;
+    const char ch1[] = "Test 1";
+    const char ch2[] = "Test 2";
+    const char ch3[] = "Test 3";
+    const char ch4[] = "This is awesom";
+    const char ch5[] = "Working fine and !";
+
+    if(argc > 1)
+	_flg = atoi(argv[1]);
+    else
+	_flg = 0;
+
+    /* initialise */
+    if(blist_new(&_list, NULL))
+	{
+	    fprintf(stderr, "Error initialising\n");
+	    return 0;
+	}
+
+    /* add to list */
+    blist_add_from_end(&_list, (void*) ch1);
+    blist_add_from_end(&_list, (void*) ch2);
+    blist_add_from_end(&_list, (void*) ch3);
+    blist_add_from_end(&_list, (void*) ch4);
+    blist_add_from_end(&_list, (void*) ch5);
+
+    /* display results */
+    blist_foreach(&_list, _flg, NULL, _blist_foreach);
+
+    /* delete list */
+    blist_delete(&_list);
+    return 0;
+}
+
+int test5(int argc, char** argv)
+{
+#define TEST5_NUM 5
+#define TEST5_BUFF_SZ 32
+    int i;
+    blist _list;
+    int _flg;
+    const char ch1[] = "Test 1";
+    const char ch2[] = "Test 2";
+    const char ch3[] = "Test 3";
+    const char ch4[] = "This is awesom";
+    const char ch5[] = "Working fine and !";
+    char* _buff[TEST5_NUM];
+    if(argc > 1)
+	_flg = atoi(argv[1]);
+    else
+	_flg = 0;
+
+    /* initialise */
+    if(blist_new(&_list, _blist_delete))
+	{
+	    fprintf(stderr, "Error initialising\n");
+	    return 0;
+	}
+
+    /* copy to buffer */
+    for(i=0; i<TEST5_NUM; i++)
+	{
+	    _buff[i] = (char*) malloc(TEST5_BUFF_SZ);
+	    switch(i)
+		{
+		case 0:
+		    strcpy(_buff[i], ch1);
+		    break;
+		case 1:
+		    strcpy(_buff[i], ch2);
+		    break;
+		case 2:
+		    strcpy(_buff[i], ch3);
+		    break;
+		case 3:
+		    strcpy(_buff[i], ch4);
+		    break;
+		case 4:
+		default:
+		    strcpy(_buff[i], ch5);
+		}
+	    blist_add_from_end(&_list, (void*) _buff[i]);
+	}
+
+    /* display results */
+    blist_foreach(&_list, _flg, NULL, _blist_foreach);
+
+    /* delete list */
+    blist_delete(&_list);
+    return 0;
+}
+
+/* Test blist function */
+int test6(int argc, char** argv)
+{
+
+    gstack _stack;
+    gstack* _stack_ptr;
+    int _flg;
+    void* _data = NULL;
+    void* _top = NULL;
+    
+    const char ch1[] = "Test 1";
+    const char ch2[] = "Test 2";
+    const char ch3[] = "Test 3";
+    const char ch4[] = "This is awesom";
+    const char ch5[] = "Working fine and !";
+
+    if(argc > 1)
+	_flg = atoi(argv[1]);
+    else
+	_flg = 0;
+
+    /* initialise */
+    if(gstack_new(&_stack, NULL))
+	{
+	    fprintf(stderr, "Error initialising\n");
+	    return 0;
+	}
+
+    /* add to list */
+    gstack_push(&_stack, (void*) ch1);
+    gstack_push(&_stack, (void*) ch2);
+    gstack_push(&_stack, (void*) ch3);
+    gstack_push(&_stack, (void*) ch4);
+    gstack_push(&_stack, (void*) ch5);
+
+    /* display results */
+    gstack_pop(&_stack, &_data);
+    if(_data != NULL)
+	fprintf(stdout, "%s\n", (char*) _data);
+
+    gstack_pop(&_stack, &_data);
+    if(_data != NULL)
+	fprintf(stdout, "%s\n", (char*) _data);    
+
+    /* get top */
+    _stack_ptr = &_stack;
+    _top = gstack_peek(_stack_ptr);
+    if(_top != NULL)
+	fprintf(stdout, "%s\n", (char*) _top);
+    /* delete list */
+    gstack_delete(&_stack);
+    return 0;
+}

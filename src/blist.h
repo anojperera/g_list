@@ -1,63 +1,87 @@
-/* Enhanced list for alist. */
-/* The current date is: 20/12/2012 */
-#ifndef __BLIST_H__
-#define __BLIST_H__
+/* Interface for improved list. This list is able to insert
+ * and remove items from any positions. Also able to store locally
+ * or hold a pointer to the object.
+ * Doubly linked lists use, so that iterations can be done in any
+ * order.
+ * Mon Mar 11 21:19:22 GMT 2013 */
+
+#ifndef _BLIST_H_
+#define _BLIST_H_
 
 #include <stdlib.h>
 
-/* Forward declaration of struct */
+/* type defs of list elements and class */
 typedef struct _blist_elm blist_elm;
-typedef struct _blist blist;
+typedef	struct _blist blist;
 
+/* Implementation of structs */
 struct _blist_elm
 {
-    unsigned int _ix;						/* index */
-    void* _data;						/* data pointer */
-    size_t _size;						/* size */
-    struct _blist_elm* _prev;					/* previous element */
-    struct _blist_elm* _next;					/* next element */
+    void* _data;
+    unsigned int _ix;
+    struct _blist_elm* _next;
+    struct _blist_elm* _prev;
 };
 
-/* linked list struct */
+
 struct _blist
 {
-    int _size;
-    int _ix_counter;						/* counter */
-    int (*compare)(const void* key1, const void* key2);		/* compare */
-    void (*delete)(void* data, unsigned int ix);			/* destructor function pointer */
-    int (*foreach)(void* obj, void* data, unsigned int ix);	/* for each function pointer */
-    blist_elm* _head;						/* head */
-    blist_elm* _tail;						/* tail */
-    void* _s_obj;						/* external object */
+    size_t _elm_count;
+    int (*_comp)(const void* key1, const void* key2);			/* function pointer for comparison */
+    void (*_delete)(void* data);						/* function pointer for delete */
+    struct _blist_elm* _head;						/* head element */
+    struct _blist_elm* _tail;						/* tail element */
 };
 
+/* interface methods */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/* Interface methods */
+    /* Constructor and destructor */
+    /* Constructor takes one argument for destructor */
+    int blist_new(blist* obj, void (*delete)(void* data));
+    void blist_delete(blist* obj);
 
-/* constructors */
-blist* bList_New(blist* obj, void (*delete)(void* data, unsigned int ix));
-blist* bList_New2(blist* obj);
+    int blist_add_next(blist* obj, blist_elm* element, void* data);
+    int blist_add_prev(blist* obj, blist_elm* elemetn, void* data);
 
-/* destructor */
-blist* bList_Delete(blist* obj);
+    int blist_remove(blist* obj, blist_elm* element, void** data);
 
-/* Insert next. Pass NULL pointer to add */
-int bList_Ins_Next(blist* obj, blist_elm* element, const void* data, size_t sz);
-int bList_Ins_Prev(blist* obj, blist_elm* element, const void* data, size_t sz);
-int bList_Remove(blist* obj, blist_elm* element);
+    /* For each function, able to control direction
+     * ext_obj shall be passed to the first argument of the callback
+     * Callback function must return 0 to continue */
+    int blist_foreach(blist* obj, unsigned int dir, void* ext_obj, int (*foreach)(void* obj, void* data, unsigned int ix));
 
-/* iterations */
-int bList_Display(blist* obj, int s_flg);
-int bList_Display2(blist* obj, int s_flg, int (*foreach)(void* obj, void* data, unsigned int ix), void* s_obj);
+    /* Convenient macros */
+#define blist_count(obj)((obj)->_elm_count)
+#define blist_get_head(obj)((obj)->_head)
+#define blist_get_tail(obj)((obj)->_tail)
+#define blist_is_head(elm)((elm)->_prev == NULL? 1 : 0)
+#define blist_is_tail(elm)((elm)->_next == NULL? 1: 0)
+#define blist_data(elm)((elm)->data)
+#define blist_next(elm)((elm)->_next)
+#define blist_prev(elm)((elm)->_prev)
 
-/* helper macros */
-#define bList_Size(blist) ((blist)->_size)
-#define bList_Head(blist) ((blist)->_head)
-#define bList_Tail(blist) ((blist)->_tail)
-#define bList_Is_Head(element) ((element)->_prev == NULL? 1 : 0)
-#define bList_Is_Tail(element) ((element)->_next == NULL? 1 : 0)
-#define bList_Get_Data(element) ((element)->_data)
-#define bList_Next(element) ((element)->_next)
-#define bList_Previous(element) ((element)->_prev)
+    
+    /* Wrapper functions for adding data to the list at each end.
+     * They internally called above methods */
+    inline __attribute__ ((always_inline)) static int blist_add_from_end(blist* obj, void* data)
+    {
+	blist_elm* _elm;
+	/* check for object pointer */
+	if(obj == NULL)
+	    return -1;
 
-#endif /* __BLIST_H__ */
+	/* get head element */
+	_elm = blist_get_tail(obj);
+
+	/* call add next method */
+	return blist_add_next(obj, _elm, data);
+    }
+    
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _BLIST_H_ */
