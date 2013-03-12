@@ -66,7 +66,7 @@ extern "C" {
     
     /* Wrapper functions for adding data to the list at each end.
      * They internally called above methods */
-    inline __attribute__ ((always_inline)) static int blist_add_from_head(blist* obj, void* data)
+    inline __attribute__ ((always_inline)) static int blist_add_from_end(blist* obj, void* data)
     {
 	blist_elm* _elm;
 	/* check for object pointer */
@@ -74,25 +74,11 @@ extern "C" {
 	    return -1;
 
 	/* get head element */
-	_elm = blist_get_head(obj);
+	_elm = blist_get_tail(obj);
 
 	/* call add next method */
 	return blist_add_next(obj, _elm, data);
     }
-
-    /* inline __attribute__ ((always_inline)) static int blist_add_from_tail(blist* obj, void* data) */
-    /* { */
-    /* 	blist_elm* _elm; */
-    /* 	/\* check for object pointer *\/ */
-    /* 	if(obj == NULL) */
-    /* 	    return -1; */
-
-    /* 	/\* get tail *\/ */
-    /* 	_elm = blist_get_tail(obj); */
-
-    /* 	/\* call add previous *\/ */
-    /* 	return blist_add_prev(obj, _elm, data); */
-    /* } */
     
 #ifdef __cplusplus
 }

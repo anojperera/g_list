@@ -7,6 +7,8 @@
 #include <time.h>
 #include <alist.h>
 #include "blist.h"
+#include "gstack.h"
+
 struct _test
 {
     char* t_str;
@@ -87,10 +89,11 @@ int test2(int argc, char** argv);
 int test3(int argc, char** argv);
 int test4(int argc, char** argv);
 int test5(int argc, char** argv);
+int test6(int argc, char** argv);
 
 int main(int argc, char** argv)
 {
-    return test5(argc, argv);
+    return test6(argc, argv);
 }
 
 
@@ -280,11 +283,11 @@ int test4(int argc, char** argv)
 	}
 
     /* add to list */
-    blist_add_from_head(&_list, (void*) ch1);
-    blist_add_from_head(&_list, (void*) ch2);
-    blist_add_from_head(&_list, (void*) ch3);
-    blist_add_from_head(&_list, (void*) ch4);
-    blist_add_from_head(&_list, (void*) ch5);
+    blist_add_from_end(&_list, (void*) ch1);
+    blist_add_from_end(&_list, (void*) ch2);
+    blist_add_from_end(&_list, (void*) ch3);
+    blist_add_from_end(&_list, (void*) ch4);
+    blist_add_from_end(&_list, (void*) ch5);
 
     /* display results */
     blist_foreach(&_list, _flg, NULL, _blist_foreach);
@@ -341,7 +344,7 @@ int test5(int argc, char** argv)
 		default:
 		    strcpy(_buff[i], ch5);
 		}
-	    blist_add_from_head(&_list, (void*) _buff[i]);
+	    blist_add_from_end(&_list, (void*) _buff[i]);
 	}
 
     /* display results */
@@ -349,5 +352,59 @@ int test5(int argc, char** argv)
 
     /* delete list */
     blist_delete(&_list);
+    return 0;
+}
+
+/* Test blist function */
+int test6(int argc, char** argv)
+{
+
+    gstack _stack;
+    gstack* _stack_ptr;
+    int _flg;
+    void* _data = NULL;
+    void* _top = NULL;
+    
+    const char ch1[] = "Test 1";
+    const char ch2[] = "Test 2";
+    const char ch3[] = "Test 3";
+    const char ch4[] = "This is awesom";
+    const char ch5[] = "Working fine and !";
+
+    if(argc > 1)
+	_flg = atoi(argv[1]);
+    else
+	_flg = 0;
+
+    /* initialise */
+    if(gstack_new(&_stack, NULL))
+	{
+	    fprintf(stderr, "Error initialising\n");
+	    return 0;
+	}
+
+    /* add to list */
+    gstack_push(&_stack, (void*) ch1);
+    gstack_push(&_stack, (void*) ch2);
+    gstack_push(&_stack, (void*) ch3);
+    gstack_push(&_stack, (void*) ch4);
+    gstack_push(&_stack, (void*) ch5);
+
+    /* display results */
+    gstack_pop(&_stack, &_data);
+    if(_data != NULL)
+	fprintf(stdout, "%s\n", (char*) _data);
+
+    gstack_pop(&_stack, &_data);
+    if(_data != NULL)
+	fprintf(stdout, "%s\n", (char*) _data);    
+
+    /* get top */
+    _stack_ptr = &_stack;
+    _top = gstack_peek(_stack_ptr);
+    if(_top != NULL)
+	fprintf(stdout, "%s\n", (char*) _top);
+    /* delete list */
+    gstack_delete(&_stack);
     return 0;
 }
