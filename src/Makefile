@@ -10,7 +10,7 @@ CCP = g++
 OBJS = main.o alist.o blist.o gstack.o
 
 $(PROG) : $(OBJS)
-		$(CCC) $(CFLAGS1) $(CFLAGS2) $(CFLAGS3) -o $(PROG) $(OBJS)
+		$(CCC) $(CFLAGS1) $(CFLAGS2) $(CFLAGS3) -o $(PROG) $(OBJS) -lpthread
 
 main.o : main.c alist.h
 		$(CCC) $(CFLAGS1) $(CFLAGS2) $(CFLAGS3) -c main.c
