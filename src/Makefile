@@ -7,7 +7,7 @@ CFLAGS3 = -Wall
 PROG = tmp
 CCC = gcc
 CCP = g++
-OBJS = main.o alist.o blist.o gstack.o
+OBJS = main.o alist.o blist.o
 
 $(PROG) : $(OBJS)
 		$(CCC) $(CFLAGS1) $(CFLAGS2) $(CFLAGS3) -o $(PROG) $(OBJS) -lpthread
@@ -20,9 +20,6 @@ alist.o : alist.c alist.h
 
 blist.o : blist.c blist.h
 		$(CCC) $(CFLAGS1) $(CFLAGS2) $(CFLAGS3) -c blist.c
-
-gstack.o: gstack.c gstack.h
-		$(CCC) $(CFLAGS1) $(CFLAGS2) $(CFLAGS3) -c gstack.c
 
 clean : 
 		rm  -fv *.o

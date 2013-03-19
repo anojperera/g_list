@@ -14,9 +14,11 @@ typedef blist gstack;
 #define gstack_new blist_new
 #define gstack_delete blist_delete
 
-int gstack_push(gstack* obj, void* data);
-int gstack_pop(gstack* obj, void** data);
-
+#define gstack_push(obj, data)(blist_add_next((obj), blist_get_tail(obj), data))
+inline __attribute__ ((always_inline)) static int gstack_pop(gstack* obj, void** data)
+{
+    return blist_remove(obj, blist_get_tail(obj), data);
+}
 #define gstack_peek(obj) ((obj)->_tail == NULL? NULL : obj->_tail->_data)
 #define gstack_count blist_count 
 

@@ -146,7 +146,7 @@ int blist_remove(blist* obj, blist_elm* element, void** data)
     if(blist_count(obj) == 0 || element == NULL)
 	return -1;
 
-    pthread_mutex_lock(obj->_mutex);
+    pthread_mutex_lock(&obj->_mutex);
     /* get a pointer to the data */
     *data = element->_data;
     
@@ -175,7 +175,7 @@ int blist_remove(blist* obj, blist_elm* element, void** data)
 
     /* decrement counter */
     obj->_elm_count--;
-    pthread_mutex_unlock(obj->_mutex);
+    pthread_mutex_unlock(&obj->_mutex);
     return 0;
 }
 

@@ -384,11 +384,12 @@ int test6(int argc, char** argv)
 	}
 
     /* add to list */
-    gstack_push(&_stack, (void*) ch1);
-    gstack_push(&_stack, (void*) ch2);
-    gstack_push(&_stack, (void*) ch3);
-    gstack_push(&_stack, (void*) ch4);
-    gstack_push(&_stack, (void*) ch5);
+    _stack_ptr = &_stack;
+    gstack_push(_stack_ptr, (void*) ch1);
+    gstack_push(_stack_ptr, (void*) ch2);
+    gstack_push(_stack_ptr, (void*) ch3);
+    gstack_push(_stack_ptr, (void*) ch4);
+    gstack_push(_stack_ptr, (void*) ch5);
 
     /* display results */
     gstack_pop(&_stack, &_data);
@@ -400,7 +401,7 @@ int test6(int argc, char** argv)
 	fprintf(stdout, "%s\n", (char*) _data);    
 
     /* get top */
-    _stack_ptr = &_stack;
+
     _top = gstack_peek(_stack_ptr);
     if(_top != NULL)
 	fprintf(stdout, "%s\n", (char*) _top);
