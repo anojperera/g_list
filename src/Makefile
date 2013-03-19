@@ -7,7 +7,7 @@ CFLAGS3 = -Wall
 PROG = tmp
 CCC = gcc
 CCP = g++
-OBJS = main.o alist.o
+OBJS = main.o alist.o blist.o
 
 $(PROG) : $(OBJS)
 		$(CCC) $(CFLAGS1) $(CFLAGS2) $(CFLAGS3) -o $(PROG) $(OBJS)
@@ -17,6 +17,9 @@ main.o : main.c alist.h
 
 alist.o : alist.c alist.h 
 		$(CCC) $(CFLAGS1) $(CFLAGS2) $(CFLAGS3) -c alist.c
+
+blist.o : blist.c blist.h
+		$(CCC) $(CFLAGS1) $(CFLAGS2) $(CFLAGS3) -c blist.c
 
 clean : 
 		rm  -fv *.o
