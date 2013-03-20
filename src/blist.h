@@ -9,7 +9,6 @@
 #define _BLIST_H_
 
 #include <stdlib.h>
-#include <pthread.h>
 
 /* type defs of list elements and class */
 typedef struct _blist_elm blist_elm;
@@ -30,7 +29,6 @@ struct _blist
     size_t _elm_count;
     int (*_comp)(const void* key1, const void* key2);			/* function pointer for comparison */
     void (*_delete)(void* data);					/* function pointer for delete */
-    pthread_mutex_t _mutex;						/* mutex for making thread safe */
     struct _blist_elm* _head;						/* head element */
     struct _blist_elm* _tail;						/* tail element */
 };

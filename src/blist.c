@@ -15,7 +15,6 @@ int blist_new(blist* obj, void (*delete)(void* data))
     obj->_delete = delete;
     obj->_head = NULL;
     obj->_tail = NULL;
-    pthread_mutex_init(&obj->_mutex, NULL);
     return 0;
 }
 
@@ -38,7 +37,6 @@ void blist_delete(blist* obj)
 	}
 
     /* finally initialise struct to NULL */
-    pthread_mutex_destroy(&obj->_mutex);
     obj->_comp = NULL;
     obj->_delete = NULL;
     obj->_head = NULL;
@@ -146,7 +144,6 @@ int blist_remove(blist* obj, blist_elm* element, void** data)
     if(blist_count(obj) == 0 || element == NULL)
 	return -1;
 
-    pthread_mutex_lock(&obj->_mutex);
     /* get a pointer to the data */
     *data = element->_data;
     
@@ -175,7 +172,6 @@ int blist_remove(blist* obj, blist_elm* element, void** data)
 
     /* decrement counter */
     obj->_elm_count--;
-    pthread_mutex_unlock(&obj->_mutex);
     return 0;
 }
 
