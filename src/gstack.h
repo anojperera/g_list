@@ -20,6 +20,6 @@ inline __attribute__ ((always_inline)) static int gstack_pop(gstack* obj, void**
     return blist_remove(obj, blist_get_tail(obj), data);
 }
 #define gstack_peek(obj) ((obj)->_tail == NULL? NULL : obj->_tail->_data)
-#define gstack_count blist_count 
+#define gstack_count blist_count
 
 #endif /* _GSTACK_H_ */
