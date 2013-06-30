@@ -18,10 +18,10 @@ typedef blist gqueue;
 /* Remove from queue */
 inline __attribute__ ((always_inline)) static int gqueue_out(gqueue* queue, void** data)
 {
-    return blist_remove(queue, NULL, data);
+    return blist_remove(queue, blist_get_head(queue), data);
 }
 
 #define gqueue_count blist_count
-#define gqueue_peek (queue) ((queue)->_head == NULL ? NULL : (queue)->_head->data)
+#define gqueue_peek(queue) ((queue)->_head == NULL ? NULL : (queue)->_head->_data)
 
 #endif /* _GQUEUE_H_ */
