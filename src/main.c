@@ -8,6 +8,7 @@
 #include <alist.h>
 #include "blist.h"
 #include "gstack.h"
+#include "gqueue.h"
 
 struct _test
 {
@@ -90,10 +91,11 @@ int test3(int argc, char** argv);
 int test4(int argc, char** argv);
 int test5(int argc, char** argv);
 int test6(int argc, char** argv);
+int test7(int argc, char** argv);
 
 int main(int argc, char** argv)
 {
-    return test6(argc, argv);
+    return test7(argc, argv);
 }
 
 
@@ -249,7 +251,7 @@ int test1(int argc, char** argv)
     for(i=0; i<MAX; i++)
 	{
 	    tmp = aList_Item(&first, i);
-	    /* printf("%s %i\n", (char*) tmp->data, i); */
+	    printf("%s %i\n", (char*) tmp->data, i);
 	}
 
     aList_Display(&first, flg, Display);
@@ -361,7 +363,6 @@ int test6(int argc, char** argv)
 
     gstack _stack;
     gstack* _stack_ptr;
-    int _flg;
     void* _data = NULL;
     void* _top = NULL;
     
@@ -370,11 +371,6 @@ int test6(int argc, char** argv)
     const char ch3[] = "Test 3";
     const char ch4[] = "This is awesom";
     const char ch5[] = "Working fine and !";
-
-    if(argc > 1)
-	_flg = atoi(argv[1]);
-    else
-	_flg = 0;
 
     /* initialise */
     if(gstack_new(&_stack, NULL))
@@ -407,5 +403,53 @@ int test6(int argc, char** argv)
 	fprintf(stdout, "%s\n", (char*) _top);
     /* delete list */
     gstack_delete(&_stack);
+    return 0;
+}
+
+/* Test blist function */
+int test7(int argc, char** argv)
+{
+
+    gqueue _queue;
+    gqueue* _queue_ptr;
+    void* _data = NULL;
+    void* _top = NULL;
+    
+    const char ch1[] = "Test 1";
+    const char ch2[] = "Test 2";
+    const char ch3[] = "Test 3";
+    const char ch4[] = "This is awesom";
+    const char ch5[] = "Working fine and !";
+
+    /* initialise */
+    if(gqueue_new(&_queue, NULL))
+	{
+	    fprintf(stderr, "Error initialising\n");
+	    return 0;
+	}
+
+    /* add to list */
+    _queue_ptr = &_queue;
+    gqueue_in(_queue_ptr, (void*) ch1);
+    gqueue_in(_queue_ptr, (void*) ch2);
+    gqueue_in(_queue_ptr, (void*) ch3);
+    gqueue_in(_queue_ptr, (void*) ch4);
+    gqueue_in(_queue_ptr, (void*) ch5);
+
+    /* display results */
+    gqueue_out(&_queue, &_data);
+    if(_data != NULL)
+	fprintf(stdout, "%s\n", (char*) _data);
+
+    gqueue_out(&_queue, &_data);
+    if(_data != NULL)
+	fprintf(stdout, "%s\n", (char*) _data);    
+
+    /* get top */
+    _top = gqueue_peek(_queue_ptr);
+    if(_top != NULL)
+    	fprintf(stdout, "%s\n", (char*) _top);
+    /* delete list */
+    gqueue_delete(&_queue);
     return 0;
 }
