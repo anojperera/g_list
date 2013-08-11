@@ -43,6 +43,8 @@ void blist_delete(blist* obj)
     /* finally initialise struct to NULL */
     obj->_comp = NULL;
     obj->_delete = NULL;
+    obj->_delete2 = NULL;
+    obj->_usr_obj = NULL;
     obj->_head = NULL;
     obj->_tail = NULL;
     return;
