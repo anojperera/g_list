@@ -13,6 +13,8 @@ int blist_new(blist* obj, void (*delete)(void* data))
     obj->_elm_count = 0;
     obj->_comp = NULL;
     obj->_delete = delete;
+    obj->_delete2 = NULL;
+    obj->_usr_obj = NULL;
     obj->_head = NULL;
     obj->_tail = NULL;
     return 0;
@@ -30,7 +32,9 @@ void blist_delete(blist* obj)
 	    if(blist_remove(obj, blist_get_tail(obj), (void**) &_data) == 0)
 		{
 		    /* call function pointer for delete */
-		    if(obj->_delete)
+		    if(obj->_usr_obj && obj->_delete2)
+			obj->_delete2(obj->_usr_obj, _data);
+		    else if(obj->_delete)
 			obj->_delete(_data);
 		}
 	    

@@ -29,6 +29,8 @@ struct _blist
     size_t _elm_count;
     int (*_comp)(const void* key1, const void* key2);			/* function pointer for comparison */
     void (*_delete)(void* data);					/* function pointer for delete */
+    void (*_delete2)(void* usr_obj, void* data);			/* optional callback pointer for delete */
+    void* _usr_obj;							/* optional user object pointer */
     struct _blist_elm* _head;						/* head element */
     struct _blist_elm* _tail;						/* tail element */
 };
@@ -62,6 +64,8 @@ extern "C" {
 #define blist_data(elm)((elm)->data)
 #define blist_next(elm)((elm)->_next)
 #define blist_prev(elm)((elm)->_prev)
+#define blist_set_usr_obj(obj, usr_obj)((obj)->_usr_obj = usr_obj)
+#define blist_set_option_del_callback(obj, callback_fn)((obj)->_delete2 = callback_fn)
 
     
     /* Wrapper functions for adding data to the list at each end.
