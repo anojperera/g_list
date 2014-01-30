@@ -42,7 +42,7 @@ extern "C" {
 
     /* Constructor and destructor */
     /* Constructor takes one argument for destructor */
-    int blist_new(blist* obj, void (*delete)(void* data));
+    int blist_new(blist* obj, void (*delete_ptr)(void* data));
     void blist_delete(blist* obj);
 
     int blist_add_next(blist* obj, blist_elm* element, void* data);
