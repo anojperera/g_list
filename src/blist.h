@@ -61,7 +61,7 @@ extern "C" {
 #define blist_get_tail(obj)((obj)->_tail)
 #define blist_is_head(elm)((elm)->_prev == NULL? 1 : 0)
 #define blist_is_tail(elm)((elm)->_next == NULL? 1: 0)
-#define blist_data(elm)((elm)->data)
+#define blist_data(elm)((elm)->_data)
 #define blist_next(elm)((elm)->_next)
 #define blist_prev(elm)((elm)->_prev)
 #define blist_set_usr_obj(obj, usr_obj)((obj)->_usr_obj = usr_obj)
