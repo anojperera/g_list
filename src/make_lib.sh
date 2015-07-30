@@ -7,6 +7,10 @@ gcc -g -Wall -O0 -fPIC -c *.c
 rm main.o
 
 # Move objects to bin
+if [ ! -d ../bin ]; then
+	mkdir ../bin
+fi
+
 mv *.o ../bin/
 
 # Create shared object
