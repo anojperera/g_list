@@ -415,14 +415,20 @@ int test7(int argc, char** argv)
     void* _data = NULL;
     void* _top = NULL;
     
-    const char ch1[] = "Test 1";
-    const char ch2[] = "Test 2";
-    const char ch3[] = "Test 3";
-    const char ch4[] = "This is awesom";
-    const char ch5[] = "Working fine and !";
+    char* ch1 = (char*) malloc(16);
+    char* ch2 = (char*) malloc(16);
+    char* ch3 = (char*) malloc(16);
+    char* ch4 = (char*) malloc(16);
+    char* ch5 = (char*) malloc(16);
 
+    strcpy(ch1, "Test1");
+    strcpy(ch2, "Test2");
+    strcpy(ch3, "Test3");
+    strcpy(ch4, "Test4");
+    strcpy(ch5, "Test6");
+    
     /* initialise */
-    if(gqueue_new(&_queue, NULL))
+    if(gqueue_new(&_queue, _blist_delete))
 	{
 	    fprintf(stderr, "Error initialising\n");
 	    return 0;
@@ -440,11 +446,11 @@ int test7(int argc, char** argv)
     gqueue_out(&_queue, &_data);
     if(_data != NULL)
 	fprintf(stdout, "%s\n", (char*) _data);
-
+    free(_data);
     gqueue_out(&_queue, &_data);
     if(_data != NULL)
 	fprintf(stdout, "%s\n", (char*) _data);    
-
+    free(_data);
     /* get top */
     _top = gqueue_peek(_queue_ptr);
     if(_top != NULL)
