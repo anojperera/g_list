@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
-#include <alist.h>
+#include "alist.h"
 #include "blist.h"
 #include "gstack.h"
 #include "gqueue.h"
@@ -365,7 +365,7 @@ int test6(int argc, char** argv)
     gstack* _stack_ptr;
     void* _data = NULL;
     void* _top = NULL;
-    
+
     const char ch1[] = "Test 1";
     const char ch2[] = "Test 2";
     const char ch3[] = "Test 3";
@@ -394,7 +394,7 @@ int test6(int argc, char** argv)
 
     gstack_pop(&_stack, &_data);
     if(_data != NULL)
-	fprintf(stdout, "%s\n", (char*) _data);    
+	fprintf(stdout, "%s\n", (char*) _data);
 
     /* get top */
 
@@ -414,7 +414,7 @@ int test7(int argc, char** argv)
     gqueue* _queue_ptr;
     void* _data = NULL;
     void* _top = NULL;
-    
+
     char* ch1 = (char*) malloc(16);
     char* ch2 = (char*) malloc(16);
     char* ch3 = (char*) malloc(16);
@@ -426,7 +426,7 @@ int test7(int argc, char** argv)
     strcpy(ch3, "Test3");
     strcpy(ch4, "Test4");
     strcpy(ch5, "Test6");
-    
+
     /* initialise */
     if(gqueue_new(&_queue, _blist_delete))
 	{
@@ -449,7 +449,7 @@ int test7(int argc, char** argv)
     free(_data);
     gqueue_out(&_queue, &_data);
     if(_data != NULL)
-	fprintf(stdout, "%s\n", (char*) _data);    
+	fprintf(stdout, "%s\n", (char*) _data);
     free(_data);
     /* get top */
     _top = gqueue_peek(_queue_ptr);
